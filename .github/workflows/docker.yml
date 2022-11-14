@@ -1,16 +1,38 @@
-name: Build and Push Docker Images
-on: push
+name: Build and push images
+on:
+  push:
+    branches:
+    - master
+    paths:
+    - Makefile
+    - 'make/*.mk'
+    - 'docker/*/Makefile'
+    - 'docker/*/Dockerfile'
+    - '.github/workflows/*.yml'
+    - .gitlab-ci.yml
+env:
+  SOURCE: ${{ github.server_url }}/${{ github.repository }}
 jobs:
-  docker:
-    name: Build and Push Docker Images
+  ghcr:
+    name: GitHub Container Registry
     runs-on: ubuntu-latest
-    env:
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      GITHUB_USER: ${{ github.actor }}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
     - uses: actions/checkout@v3
-    - run: make build
-    - run: make push-dockerhub
-    - run: make push-github
+    - name: Build images and push to GitHub Container Registry
+      run: make login build push
+      env:
+        DOCKER_REGISTRY: ghcr.io
+        DOCKER_USERNAME: ${{ github.actor }}
+        DOCKER_PASSWORD: ${{ github.token }}
+        URL_PREFIX: ${{ github.server_url }}/${{ github.repository }}/pkgs/container/dev-env-
+  docker:
+    name: Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build images and push to Docker Hub
+      run: make login build push
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        URL_PREFIX: https://hub.docker.com/r/${{ secrets.DOCKER_USERNAME }}/dev-env-

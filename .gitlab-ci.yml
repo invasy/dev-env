@@ -2,11 +2,26 @@ image: docker:latest
 services:
 - docker:dind
 stages:
-- build_and_push
+- build
 before_script:
 - apk add --no-cache bash make
-build_and_push:
-  stage: build_and_push
+build:
+  stage: build
+  rules:
+  - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    changes:
+    - Makefile
+    - make/*.mk
+    - docker/*/Makefile
+    - docker/*/Dockerfile
+    - .github/workflows/*.yml
+    - $CI_CONFIG_PATH
+  variables:
+    DOCKER_REGISTRY: $CI_REGISTRY
+    DOCKER_USERNAME: $GITLAB_USERNAME
+    DOCKER_PASSWORD: $GITLAB_TOKEN
+    IMAGE_NAME_PREFIX: $CI_REGISTRY/$GITLAB_USERNAME/$CI_PROJECT_NAME/
+    SOURCE: $CI_PROJECT_URL
+    URL: $CI_PROJECT_URL/container_registry/
   script:
-  - make build
-  - make push-gitlab
+  - make login build push

@@ -1,33 +1,33 @@
 SHELL := /bin/bash
 
-NAMESPACE := invasy
-image := $(NAMESPACE)/dev-env-$(name)
-image_github := $(GITHUB_REGISTRY)/$(image)
-image_gitlab := $(GITLAB_REGISTRY)/$(image)
+IMAGE_NAME := $(if $(IMAGE_NAME_PREFIX),$(IMAGE_NAME_PREFIX),$(if $(DOCKER_REGISTRY),$(DOCKER_REGISTRY)/)$(DOCKER_USERNAME)/$(PROJECT)-)$(name)
+tags := $(addprefix $(IMAGE_NAME):,$(tags))
 container := dev_env_$(name)
 
-tags_dockerhub := $(addprefix $(image):,$(tags))
-tags_github    := $(addprefix $(image_github):,$(tags))
-tags_gitlab    := $(addprefix $(image_gitlab):,$(tags))
-tags_all       := $(tags_dockerhub) $(tags_github) $(tags_gitlab)
+ifneq ($(URL_PREFIX),)
+URL := $(URL_PREFIX)$(name)
+endif
 
-define deploy_to_registry =
-$(addsuffix -$1,$(TARGETS_DEPLOY)): build
-	@$$(foreach t,$$(tags_$1),docker image push '$$t' &&) :
+define labels :=
+$(if $(SOURCE),org.opencontainers.image.source='$(SOURCE)')
+$(if $(URL),org.opencontainers.image.url='$(URL)')
 endef
 
 is_valid = $(findstring $1,$(invalid_targets))
-
 update_version_m = sed -E 's/^(\s*$1\s*:=\s*)[0-9a-z.]+$$/\1$2/' -i ../$3/Makefile
 update_version_d = sed -E 's/^(ARG\s+$1=")[^"]+(")$$/\1$2\2/' -i Dockerfile
+update_version_r = sed -E 's/^(\|\s+(\*\*|)\[$1\].*\2\s+\|\s+)\S+(\s+\|)$$/\1$2\3/i' -i README.md
 
 .PHONY: all $(TARGETS)
 all: build
 
 build: Dockerfile
-	@docker build --progress plain $(if $(no_cache),--no-cache )\
+	@docker build --progress plain \
+		$(if $(no_cache),--no-cache) \
+		$(if $(no_pull),,--pull) \
 		$(addprefix --build-arg=,$(build_args)) \
-		$(addprefix --tag=,$(tags_all)) .
+		$(addprefix --tag=,$(tags)) \
+		$(addprefix --label=,$(labels)) .
 
 ifeq ($(call is_valid,run),)
 run: build
@@ -48,18 +48,20 @@ root:
 endif
 
 list ls:
-	@-docker container ls -f 'name=$(container)'
-	@-$(foreach i,$(image) $(image_github) $(image_gitlab),docker image $@ '$i';)
+	@echo -e "\e[34m>>\e[m \e[1;32m$(PROJECT)-$(name)\e[m \e[1;37mcontainers\e[m:" && \
+	docker container ls -f 'name=$(container)' | tail --lines=+2
+	@echo -e "\e[34m>>\e[m \e[1;32m$(PROJECT)-$(name)\e[m \e[1;37mimages\e[m:" && \
+	docker image ls '$(IMAGE_NAME)' | tail --lines=+2
 
-$(foreach r,$(REGISTRIES),$(eval $(call deploy_to_registry,$r)))
-$(TARGETS_DEPLOY): $(addprefix push-,$(REGISTRIES))
+deploy push: build
+	@$(foreach t,$(tags),docker push '$t';)
 
 pull:
-	@docker image pull '$(if $(tag),$(tag),$(firstword $(tags_dockerhub)))'
+	@docker image pull '$(if $(tag),$(tag),$(IMAGE_NAME):latest)'
 
 clean:
 	@-docker container rm -f $$(docker container ls -q -f 'name=$(container)') &>/dev/null
-	@-docker image rm -f $$($(foreach i,$(image) $(image_github) $(image_gitlab),docker image ls -q '$i';)) &>/dev/null
+	@-docker image rm -f $$(docker image ls -q '$(IMAGE_NAME)') &>/dev/null
 
 ifdef invalid_targets
 $(invalid_targets):
