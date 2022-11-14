@@ -1,0 +1,25 @@
+*               text=auto
+
+# Make
+Makefile        text eol=lf
+*.mk            text eol=lf
+
+# Docker
+Dockerfile      text eol=lf
+.dockerignore   text
+sshd_config     text eol=lf
+
+# Scripts
+*.py            text diff=python
+
+# Configuration
+*.yml           text
+.editorconfig   text
+
+# Documentation
+*.md            text diff=markdown
+*.png           binary
+
+# Git
+.gitattributes  text export-ignore
+.gitignore      text export-ignore
