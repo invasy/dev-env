@@ -14,12 +14,14 @@ Parent image: [invasy/dev-env-cpp](../cpp/README.md "invasy/dev-env-cpp").
 | Tool                                       | Version                     |
 |--------------------------------------------|-----------------------------|
 |   [Debian] ([slim])                        | [11.4 (Bullseye)][bullseye] |
+|   [GPG]                                    | 2.2.27                      |
+|   [libgcrypt]                              | 1.8.8                       |
 |   [OpenSSH] server                         | 8.4p1                       |
 |   [rsync]                                  | 3.2.3                       |
+|   [CMake]                                  | 3.23.5                      |
+|   [ninja]                                  | 1.11.1                      |
 |   [GNU Make][make]                         | 4.3                         |
 |   [GNU Debugger][gdb] (gdb) with gdbserver | 10.1                        |
-|   [CMake]                                  | 3.22.5                      |
-|   [ninja]                                  | 1.11.0                      |
 | **[GCC]**                                  | [12.1.0][gcc-12]            |
 
 ## Usage
