@@ -61,6 +61,7 @@ login:
 # Docker Compose
 $(addprefix up-,$(IMAGES)): compose.yml
 	@docker compose up -d '$(call image,$@)'
+$(foreach i,$(IMAGES),$(eval up-$i: build-$i))
 
 down $(addprefix down-,$(IMAGES)): compose.yml
 	@docker compose down
