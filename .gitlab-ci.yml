@@ -14,7 +14,6 @@ build:
     - make/*.mk
     - docker/*/Makefile
     - docker/*/Dockerfile
-    - .github/workflows/*.yml
     - $CI_CONFIG_PATH
   variables:
     DOCKER_REGISTRY: $CI_REGISTRY

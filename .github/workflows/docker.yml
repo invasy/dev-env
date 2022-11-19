@@ -9,7 +9,6 @@ on:
     - 'docker/*/Makefile'
     - 'docker/*/Dockerfile'
     - '.github/workflows/*.yml'
-    - .gitlab-ci.yml
 env:
   SOURCE: ${{ github.server_url }}/${{ github.repository }}
 jobs:
