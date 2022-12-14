@@ -63,7 +63,7 @@ clean:
 	@-docker container rm -f $$(docker container ls -q -f 'name=$(container)') &>/dev/null
 	@-docker image rm -f $$(docker image ls -q '$(IMAGE_NAME)') &>/dev/null
 
-ifdef invalid_targets
+ifneq ($(invalid_targets),)
 $(invalid_targets):
 	@$(error invalid target '$@' for image '$(name)')false
 endif
