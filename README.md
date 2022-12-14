@@ -8,9 +8,9 @@
 
 ## Images
 | Stack | Name        | ![Docker Hub][dh]                | ![GitHub Container Registry][gh]         | ![GitLab Container Registry][gl]                     |
-|-------|-------------|:--------------------------------:|:----------------------------------------:|:----------------------------------------------------:|
-|       | **[base]**  | [invasy/dev-env-base][base-dh]   | [ghcr.io/invasy/dev-env-base][base-gh]   | [registry.gitlab.com/invasy/dev-env/base][base-gl]   |
-|       | **[cpp]**   | [invasy/dev-env-cpp][cpp-dh]     | [ghcr.io/invasy/dev-env-cpp][cpp-gh]     | [registry.gitlab.com/invasy/dev-env/cpp][cpp-gl]     |
+|:-----:|-------------|:--------------------------------:|:----------------------------------------:|:----------------------------------------------------:|
+| —     | **[base]**  | [invasy/dev-env-base][base-dh]   | [ghcr.io/invasy/dev-env-base][base-gh]   | [registry.gitlab.com/invasy/dev-env/base][base-gl]   |
+| —     | **[cpp]**   | [invasy/dev-env-cpp][cpp-dh]     | [ghcr.io/invasy/dev-env-cpp][cpp-gh]     | [registry.gitlab.com/invasy/dev-env/cpp][cpp-gl]     |
 | C/C++ | **[clang]** | [invasy/dev-env-clang][clang-dh] | [ghcr.io/invasy/dev-env-clang][clang-gh] | [registry.gitlab.com/invasy/dev-env/clang][clang-gl] |
 | C/C++ | **[gcc]**   | [invasy/dev-env-gcc][gcc-dh]     | [ghcr.io/invasy/dev-env-gcc][gcc-gh]     | [registry.gitlab.com/invasy/dev-env/gcc][gcc-gl]     |
 

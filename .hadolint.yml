@@ -1,0 +1,24 @@
+failure-threshold: warning
+ignored:
+- DL3003
+- DL3008
+- DL4006
+label-schema: # https://github.com/opencontainers/image-spec/blob/main/annotations.md#pre-defined-annotation-keys
+  org.opencontainers.image.title: text
+  org.opencontainers.image.description: text
+  org.opencontainers.image.version: semver
+  # org.opencontainers.image.revision: text
+  # org.opencontainers.image.created: rfc3339
+  org.opencontainers.image.url: url
+  # org.opencontainers.image.documentation: url
+  org.opencontainers.image.source: url
+  org.opencontainers.image.licenses: spdx
+  org.opencontainers.image.authors: text
+  org.opencontainers.image.vendor: text
+  maintainer: text
+strict-labels: true
+trustedRegistries:
+- docker.io
+- ghcr.io
+- registry.gitlab.com
+- mcr.microsoft.com

@@ -8,11 +8,10 @@ LABEL org.opencontainers.image.description="Base image for development environme
 LABEL org.opencontainers.image.version="1.0.0"
 LABEL org.opencontainers.image.source="https://github.com/invasy/dev-env"
 LABEL org.opencontainers.image.url="https://github.com/invasy/dev-env/pkgs/container/dev-env-base"
-LABEL org.opencontainers.image.license="GPL-3.0+"
+LABEL org.opencontainers.image.licenses="GPL-3.0-or-later"
 LABEL org.opencontainers.image.authors="Vasiliy Polyakov <docker@invasy.dev>"
 LABEL org.opencontainers.image.vendor="Vasiliy Polyakov <docker@invasy.dev>"
 LABEL maintainer="Vasiliy Polyakov <docker@invasy.dev>"
-
 
 # Create user
 RUN set -eux; \

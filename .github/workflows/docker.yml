@@ -5,12 +5,13 @@ on:
     - master
     paths:
     - Makefile
-    - 'make/*.mk'
-    - 'docker/*/Makefile'
-    - 'docker/*/Dockerfile'
-    - '.github/workflows/*.yml'
+    - "make/*.mk"
+    - "docker/*/Makefile"
+    - "docker/*/Dockerfile"
+    - ".github/workflows/*.yml"
 env:
-  SOURCE: ${{ github.server_url }}/${{ github.repository }}
+  IMAGE_REVISION: ${{ github.sha }}
+  IMAGE_SOURCE: ${{ github.server_url }}/${{ github.repository }}
 jobs:
   ghcr:
     name: GitHub Container Registry
@@ -20,10 +21,10 @@ jobs:
     - name: Build images and push to GitHub Container Registry
       run: make login build push
       env:
-        DOCKER_REGISTRY: ghcr.io
-        DOCKER_USERNAME: ${{ github.actor }}
-        DOCKER_PASSWORD: ${{ github.token }}
-        URL_PREFIX: ${{ github.server_url }}/${{ github.repository }}/pkgs/container/dev-env-
+        REGISTRY: ghcr.io
+        REGISTRY_USERNAME: ${{ github.actor }}
+        REGISTRY_PASSWORD: ${{ github.token }}
+        IMAGE_URL_PREFIX: ${{ github.server_url }}/${{ github.repository }}/pkgs/container/dev-env-
   docker:
     name: Docker Hub
     runs-on: ubuntu-latest
@@ -32,6 +33,6 @@ jobs:
     - name: Build images and push to Docker Hub
       run: make login build push
       env:
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        URL_PREFIX: https://hub.docker.com/r/${{ secrets.DOCKER_USERNAME }}/dev-env-
+        REGISTRY_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        REGISTRY_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        IMAGE_URL_PREFIX: https://hub.docker.com/r/${{ secrets.DOCKER_USERNAME }}/dev-env-
